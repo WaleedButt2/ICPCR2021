@@ -48,7 +48,7 @@ int main(){
                 ans=ans ^ maze[i][j];
             }
         }
-        cout<<ans<<endl;
+        cout<<"Query #"<<v+1<<": "<<ans<<endl;
     }
 }
 /*
