@@ -25,7 +25,7 @@ void Print(vector<bool> x){
     else cout<<"0 ";
     cout<<endl;
 }
-void morbid_BFS(vector<pair<int,int>> Degree,vector<vt> adj_list){
+void morbid_BFS(vector<pair<int,int>> Degree,map <int, set<int>> adj_list){
     vt assigned_color (Degree.sz,-1);
     int color=0;
     //first is location second is dist
@@ -33,15 +33,17 @@ void morbid_BFS(vector<pair<int,int>> Degree,vector<vt> adj_list){
         int cur=Degree[v].second;
         if(assigned_color[cur]>=0) continue;
         vt holder ={cur};
-            FOR(adj_list.sz){
+            FOR(Degree.sz){
+                if(assigned_color[i]<0){
                 bool found=false;
                 for(auto u:holder)
-                if(find(adj_list[u].begin(),adj_list[u].end(),i)!=adj_list[u].end()) {
+                if(adj_list[u].count(i)) {
                     found=true;break;
                 }
                 if(!found) {
                     assigned_color[i]=color;
                     holder.pb(i);
+                }
                 }
         }
     color++;
@@ -54,15 +56,16 @@ int main(){
     cin>>t;
     FORV(t){
         int x,y,e;cin>>x>>e;
-        if(!x||!y) {
+        if(!x) {
             cout<<0<<endl;continue;
         }
-        vector<vt> Graph(x);
+        else if(!e) {cout<<1<<endl;continue;}
+        map <int, set<int>> Graph;
         vector<pair<int,int>> Degree(x);
         FOR(e){
             cin>>x>>y;x--;y--;
-            Graph[x].pb(y);
-            Graph[y].pb(x);
+            Graph[x].insert(y);
+            Graph[y].insert(x);
         }
         int highest=0;
         FOR(Graph.sz){
