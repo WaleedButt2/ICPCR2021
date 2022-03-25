@@ -28,32 +28,26 @@ void Print(vector<bool> x){
 void morbid_BFS(vector<pair<int,int>> Degree,vector<vt> adj_list){
     vt assigned_color (Degree.sz,-1);
     int color=0;
-    queue<pair<int,int>> q;
-    pair<int,int> p;
     //first is location second is dist
-    FOR(Degree.sz){
-    p.first=Degree[i].second;
-    p.second=0;
-    if(assigned_color[p.first]>=0) continue;
-    q.push(p);vector<bool> visited(Degree.sz,false);
-   // cout<<endl;
-    while(!q.empty()){
-        p=q.front();q.pop();
-        visited[p.first]=true;
-       Print(assigned_color);
-        if(p.second%2==0) {
-            bool flag=false;
-            FORJ(adj_list[p.first].sz) if(assigned_color[adj_list[p.first][j]]==color) flag=true;
-            if(!flag) assigned_color[p.first]=color;
-        }//cout<<p.first<<' '<<p.second<<endl; 
-        //Print(assigned_color);
-        FORJ(adj_list[p.first].sz) {
-            if(!visited[adj_list[p.first][j]])q.push(pair<int,int>(adj_list[p.first][j],p.second+1));
+    FORV(Degree.sz){
+        int cur=Degree[v].second;
+        if(assigned_color[cur]>=0) continue;
+        vt holder ={cur};
+            FOR(adj_list.sz){
+                bool found=false;
+                for(auto u:holder)
+                if(find(adj_list[u].begin(),adj_list[u].end(),i)!=adj_list[u].end()) {
+                    found=true;break;
+                }
+                if(!found) {
+                    assigned_color[i]=color;
+                    holder.pb(i);
+                }
         }
-    }
     color++;
     }
-    Print(assigned_color);
+   // Print(assigned_color);
+    cout<<color<<endl;
 }
 int main(){
     int t;
@@ -75,7 +69,7 @@ int main(){
             Degree[i]=pair<int,int>(Graph[i].sz,i);
         }
         sort(Degree.rbegin(),Degree.rend());
-        Print(Graph);
+        //Print(Graph);
         morbid_BFS(Degree,Graph);
         
         //cout<<color<<endl;
