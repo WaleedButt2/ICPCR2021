@@ -25,7 +25,36 @@ void Print(vector<bool> x){
     else cout<<"0 ";
     cout<<endl;
 }
-//use pair to identify colors
+void morbid_BFS(vector<pair<int,int>> Degree,vector<vt> adj_list){
+    vt assigned_color (Degree.sz,-1);
+    int color=0;
+    queue<pair<int,int>> q;
+    pair<int,int> p;
+    //first is location second is dist
+    FOR(Degree.sz){
+    p.first=Degree[i].second;
+    p.second=0;
+    if(assigned_color[p.first]>=0) continue;
+    q.push(p);vector<bool> visited(Degree.sz,false);
+   // cout<<endl;
+    while(!q.empty()){
+        p=q.front();q.pop();
+        visited[p.first]=true;
+       Print(assigned_color);
+        if(p.second%2==0) {
+            bool flag=false;
+            FORJ(adj_list[p.first].sz) if(assigned_color[adj_list[p.first][j]]==color) flag=true;
+            if(!flag) assigned_color[p.first]=color;
+        }//cout<<p.first<<' '<<p.second<<endl; 
+        //Print(assigned_color);
+        FORJ(adj_list[p.first].sz) {
+            if(!visited[adj_list[p.first][j]])q.push(pair<int,int>(adj_list[p.first][j],p.second+1));
+        }
+    }
+    color++;
+    }
+    Print(assigned_color);
+}
 int main(){
     int t;
     cin>>t;
@@ -34,7 +63,7 @@ int main(){
         if(!x||!y) {
             cout<<0<<endl;continue;
         }
-        map<int,vt> Graph;
+        vector<vt> Graph(x);
         vector<pair<int,int>> Degree(x);
         FOR(e){
             cin>>x>>y;x--;y--;
@@ -46,29 +75,10 @@ int main(){
             Degree[i]=pair<int,int>(Graph[i].sz,i);
         }
         sort(Degree.rbegin(),Degree.rend());
-        vt assigned_color (Degree.sz,0);
-        int color=1;
-        FOR(Degree.sz){
-            vector<bool> curr(color+1,false);
-            int x=Degree[i].second;if(x==-1) exit(0);
-            FORJ(Graph[x].sz){
-                int col=assigned_color[Graph[x][j]];
-                if(col==0) continue; 
-                curr[col]=true;
-            }
-            int j;bool found=false;
-          //  Print(curr);
-            for(j=1;j<color+1;j++) if(!curr[j]) {found=true;break;}
-           // Print(curr);
-            if(found) assigned_color[x]=j;
-            else {
-                color++;
-                assigned_color[x]=color;
-            } 
-        }
-       // cout<<endl;
-      //  Print(assigned_color);
-        cout<<color<<endl;
+        Print(Graph);
+        morbid_BFS(Degree,Graph);
+        
+        //cout<<color<<endl;
     }
 }
 /* 
@@ -77,7 +87,7 @@ int main(){
 3 1 2 1 2 3 2 1 1 1 0
 
 1
-10 14
+10 12
 1 2
 2 5
 5 6
@@ -85,11 +95,9 @@ int main(){
 3 1
 3 4
 3 6
-1 2
 7 10
 7 2
 8 1
 6 2
 2 3
-2 5
 */

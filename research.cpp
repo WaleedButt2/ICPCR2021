@@ -14,19 +14,15 @@ void Print(vector<int> v){
     cout<<endl;
 }
 void Print(vector<vt> v){
-    cout<<"  ";
-    FOR(v.sz) cout<<i<<"  ";
-    cout<<endl;
     FOR(v.sz) {
-        cout<<i<<' ';
-    FORJ(v[i].sz){ 
-        cout<<v[i][j];
-        if(v[i][j]>=10) cout<<" ";
-        else if(v[i][j]>=0) cout<<"  ";
-        else cout<<" ";
-    } 
+    FORJ(v[i].sz)
+        cout<<v[i][j]+1<<' ';
     cout<<endl;
     }
+}
+void Print(vector<bool> x){
+    FOR(x.sz) if(x[i]) cout<<"1 ";
+    else cout<<"0 ";
     cout<<endl;
 }
 int main(){
